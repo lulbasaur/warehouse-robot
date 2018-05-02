@@ -1,5 +1,6 @@
 import socket
 import threading
+import TCPData
 
 class ThreadedServer(object):
     def __init__(self, host, port):
@@ -10,6 +11,7 @@ class ThreadedServer(object):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.bind((self.host, self.port))
+        self.threads = []
 
     def listen_for_incoming_connections(self):
         self.sock.listen(3)
@@ -18,16 +20,19 @@ class ThreadedServer(object):
             #time out if client is inactive
             client.settimeout(60)
             #spawn thread for each client
-            threading.Thread(target = self.listenToClient,args = (client,address)).start()
+            threading.Thread(target = self.listen_to_client,args = (client,address)).start()
 
     def listen_to_client(self, client, address):
+        #recieve buffer
         rx_data_size = 1024
         while True:
             try:
-                data = client.recv(size)
+                data = client.recv(rx_data_size)
                 if data:
-                    response = data
-                    client.send(response)
+                    print("Data recieved")
+                    response = data.decode('utf-8')
+                    print(response)
+                    client.sendall(response.encode('utf-8'))
                 else:
                     raise error('Client disconnected')
             except:

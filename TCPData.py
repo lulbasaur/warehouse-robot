@@ -1,8 +1,7 @@
 from types import *
 
 class TCPData(object):
-    #init with auto/manual
-    __init__(self):
+    def __init__(self):
         #init with auto/manual 0/1
         self.mode = -1
         self.option = -1
