@@ -12,7 +12,7 @@ class ThreadedServer(object):
         self.sock.bind((self.host, self.port))
 
     def listen_for_incoming_connections(self):
-        self.sock.listen(5)
+        self.sock.listen(3)
         while True:
             client, address = self.sock.accept()
             #time out if client is inactive
