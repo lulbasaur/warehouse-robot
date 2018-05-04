@@ -47,4 +47,20 @@ class robot(object):
     # Send Navigation
     # Receive and forward Status to client
     # 
+    def send(message):
+        self.bluetooth_client.send(message);
+
+    
+    def receive():
+        return self.bluetooth_server.receive().decode("utf-8")
+
+
+
+
+
+
+
+
+
+
 
