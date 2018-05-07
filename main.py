@@ -13,7 +13,7 @@ class ThreadedServer(object):
         #host address and port
         self.host = host
         self.port = port
-        #set socket variables
+        #socket config
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.bind((self.host, self.port))
@@ -26,7 +26,7 @@ class ThreadedServer(object):
         self.sock.listen(3)
         thread_id = 1
         while True:
-            print("socket is listening")
+            print("socket is listening...")
             client, address = self.sock.accept()
             print('Connected to :', address[0], ':', address[1])
             #time out if client is inactive
@@ -69,6 +69,7 @@ class ThreadedServer(object):
 
 
 if __name__ == "__main__":
+
     while True:
         print('Initiating Warehouse Server...')
         try:
