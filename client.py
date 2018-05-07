@@ -3,9 +3,13 @@
 from __future__ import print_function
 
 import socket
+<<<<<<< HEAD
 import pickle
 import sys
 from TCPData import TCPData
+=======
+import sys
+>>>>>>> a4478848d66d1edc5f261ace469d446792a41433
 # Enable for clearing terminal purposes
 # import os
 
@@ -39,6 +43,10 @@ def close_connection_to_server(server_socket):
     server_socket.close()
 
 
+<<<<<<< HEAD
+=======
+# min, max range allowed in input
+>>>>>>> a4478848d66d1edc5f261ace469d446792a41433
 def get_int_input(default):
     int_input = input("> ")
     if int_input == '':
@@ -48,7 +56,10 @@ def get_int_input(default):
     return int_input
 
 
+<<<<<<< HEAD
 # min, max range allowed in input
+=======
+>>>>>>> a4478848d66d1edc5f261ace469d446792a41433
 def get_and_validate_int_input(range_min, range_max, default):
     int_input = get_int_input(default)
     while not(int_input >= range_min and int_input <= range_max):
@@ -88,9 +99,15 @@ def connection_menu():
 
         s_socket = connect_to_server(server_ip, server_port)
     elif chosen_option == 2:
+<<<<<<< HEAD
         raise NotImplementedError
     elif chosen_option == 3:
         raise NotImplementedError
+=======
+        pass
+    elif chosen_option == 3:
+        pass
+>>>>>>> a4478848d66d1edc5f261ace469d446792a41433
         # cv2?
     else:
         print("Exiting...")
@@ -112,6 +129,7 @@ def robot_menu():
     print("1. Automatic")
     print("2. Manual")
     print("3. Quit")
+<<<<<<< HEAD
 
     chosen_option = get_and_validate_int_input(1, 4, 4)
     data = TCPData()
@@ -119,6 +137,15 @@ def robot_menu():
     if chosen_option == 1:
         print("Prioritize region 0-4 [Default 0] ")
         prio = get_and_validate_int_input(0, 4, 0)
+=======
+    # chosen_option = -1
+    # while(chosen_option > 0 and chosen_option <= 4):
+    chosen_option = get_and_validate_int_input(1, 4, 4)
+
+    data = TCPData()
+    if chosen_option == 1:
+        prio = int(input("Prioritize region 0-4: [Default 0]"))
+>>>>>>> a4478848d66d1edc5f261ace469d446792a41433
         data.set_mode(0)
         data.set_auto_prio(prio)
     elif chosen_option == 2:
@@ -130,7 +157,10 @@ def robot_menu():
 def main():
     # get_integer_input(0, 4, 2)
     s_socket = connection_menu()
+<<<<<<< HEAD
     robot_menu()
+=======
+>>>>>>> a4478848d66d1edc5f261ace469d446792a41433
     test_send_msg_to_server(s_socket)
     # robot_menu()
     # socket = connect_to_server(TCP_IP, TCP_PORT)
