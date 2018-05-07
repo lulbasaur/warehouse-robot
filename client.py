@@ -3,15 +3,16 @@
 from __future__ import print_function
 
 import socket
+import pickle
 import sys
+from TCPData import TCPData
+
 # Enable for clearing terminal purposes
 # import os
 
 DEFAULT_IP = '127.0.0.1'
 DEFAULT_PORT = 5005
 BUFFER_SIZE = 1024
-# CURRENT_MODE = -1
-
 
 def connect_to_server(server_ip, server_port):
     try:
@@ -47,6 +48,7 @@ def get_int_input(default):
     return int_input
 
 
+# min, max range allowed in input
 def get_and_validate_int_input(range_min, range_max, default):
     int_input = get_int_input(default)
     while not(int_input >= range_min and int_input <= range_max):
@@ -72,24 +74,21 @@ def connection_menu():
     if chosen_option == 1:
         print ("Server IP [Default 127.0.0.1]")
         server_ip = input("> ")
-
         if server_ip == "":
             server_ip = DEFAULT_IP
-
         print ("Server port [Default 5005]")
         server_port = input("> ")
-
         if server_port == "":
             server_port = DEFAULT_PORT
         else:
             server_port = int(server_port)
-
         s_socket = connect_to_server(server_ip, server_port)
     elif chosen_option == 2:
-        pass
+        raise NotImplementedError
     elif chosen_option == 3:
+        raise NotImplementedError
+    elif chosen_option == 4:
         pass
-        # cv2?
     else:
         print("Exiting...")
         sys.exit()
@@ -106,28 +105,60 @@ def test_send_msg_to_server(s_socket):
     print ("received data:", data.decode('utf-8'))
 
 
-def robot_menu():
+def automatic_mode(data):
+    print("Prioritize region 0-4 [Default 0] ")
+    prio = get_and_validate_int_input(0, 4, 0)
+    data.option = prio
+    return data
+
+
+def manual_mode(data):
+    print("Move the robot [Default FORWARD]")
+    print("0: LEFT, 1: FORWARD, 2: RIGHT, 3: BACKWARD")
+    move = get_and_validate_int_input(0, 3, 1)
+    data.option = move
+    return data
+
+
+def robot_menu(data):
     print("1. Automatic")
     print("2. Manual")
     print("3. Quit")
-    # chosen_option = -1
-    # while(chosen_option > 0 and chosen_option <= 4):
-    chosen_option = get_and_validate_int_input(1, 4, 4)
-
-    data = TCPData()
+    chosen_option = get_and_validate_int_input(1, 3, 1)
     if chosen_option == 1:
-        prio = int(input("Prioritize region 0-4: [Default 0]"))
-        data.set_mode(0)
-        data.set_auto_prio(prio)
+        data.mode = 0
     elif chosen_option == 2:
-        data.set_mode(1)
+        data.mode = 1
     else:
         sys.exit()
+    return data
+
+
+def serialize_data(data):
+    serialized_data = pickle.dumps(data)
+    return serialized_data
+
+
+def send_serialized_data(s_socket, data):
+    serialized_data = serialize_data(data)
+    s_socket.sendall(serialized_data)
 
 
 def main():
-    # get_integer_input(0, 4, 2)
     s_socket = connection_menu()
+    data = TCPData()
+
+    data = robot_menu(data)
+
+    if data.mode == 0:
+        data = automatic_mode(data)
+    elif data.mode == 1:
+        data = manual_mode(data)
+    else:
+        raise ValueError
+
+    send_serialized_data(s_socket, serialize_data(data))
+
     test_send_msg_to_server(s_socket)
     # robot_menu()
     # socket = connect_to_server(TCP_IP, TCP_PORT)
