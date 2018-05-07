@@ -12,13 +12,14 @@ from TCPData import TCPData
 
 DEFAULT_IP = '127.0.0.1'
 DEFAULT_PORT = 5005
-BUFFER_SIZE = 1024
+BUFFER_SIZE = 4096
 
 def connect_to_server(server_ip, server_port):
     try:
         s_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s_socket.connect((server_ip, server_port))
         print("Connected to server", server_ip, " on port ", server_port)
+        save_recent_server(server_ip, server_port)
     except socket.error:
         print("Could not connect to server.")
         connection_menu()
@@ -62,12 +63,28 @@ def get_connection_input():
     pass
 
 
+def save_recent_server(ip, port):
+    f = open('recent_server', 'w')
+    f.write(str(ip))
+    f.write('\n')
+    f.write(str(port))
+    f.close()
+
+
+def open_recent_server():
+    f = open("recent_server", "r")
+    server_ip = f.readline().rstrip('\n')
+    server_port = f.readline().rstrip('\n')
+    f.close()
+    return {'ip': server_ip, 'port': server_port}
+
 def connection_menu():
     print ("-----------------------------------")
     print ("1. Connect to server")
-    print ("2. List available servers")
-    print ("3. Start videofeed here perhaps?")
-    print ("4. Quit")
+    print ("2. Connect to most recently used server")
+    print ("3. List available servers")
+    print ("4. Start videofeed here perhaps?")
+    print ("5. Quit")
     print ("-----------------------------------")
     chosen_option = get_and_validate_int_input(1, 4, 1)
 
@@ -84,7 +101,9 @@ def connection_menu():
             server_port = int(server_port)
         s_socket = connect_to_server(server_ip, server_port)
     elif chosen_option == 2:
-        raise NotImplementedError
+        server = open_recent_server()
+        print ("Connecting to " + server['ip'] + ", on port " + server['port'])
+        s_socket = connect_to_server(server['ip'], int(server['port']))
     elif chosen_option == 3:
         raise NotImplementedError
     elif chosen_option == 4:
@@ -144,6 +163,17 @@ def send_serialized_data(s_socket, data):
     s_socket.sendall(serialized_data)
 
 
+def deserialize_data(data):
+    deserialized_data = pickle.loads(data)
+    return deserialized_data
+
+
+def receive_serialized_data(s_socket):
+    serialized_data = s_socket.recv(BUFFER_SIZE)
+    deserialized_data = deserialize_data(serialized_data)
+    return deserialized_data
+
+
 def main():
     s_socket = connection_menu()
     data = TCPData()
@@ -157,7 +187,10 @@ def main():
     else:
         raise ValueError
 
-    send_serialized_data(s_socket, serialize_data(data))
+    send_serialized_data(s_socket, data)
+    data = receive_serialized_data(s_socket)
+    print("Option: ", data.option)
+    print("Mode: ", data.mode)
 
     test_send_msg_to_server(s_socket)
     # robot_menu()

@@ -36,4 +36,4 @@ class TCPData(object):
         del self._option
 
     def data_print(self):
-        print("Data: {}, {}").format(self.mode, self.option)
+        print("Data: {}, {}").format(self._mode, self._option)
