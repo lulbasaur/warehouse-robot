@@ -129,9 +129,9 @@ def robot_menu(data):
     print("3. Quit")
     chosen_option = get_and_validate_int_input(1, 4, 4)
     if chosen_option == 1:
-        data.set_mode(0)
+        data.mode = 0
     elif chosen_option == 2:
-        data.set_mode(1)
+        data.mode = 1
     else:
         sys.exit()
     return data

@@ -3,28 +3,37 @@ from types import *
 
 class TCPData(object):
     def __init__(self):
-        # init with auto/manual 0/1
-        self.mode = -1
-        self.option = -1
+        self.mode = None
+        self.option = None
 
-    def set_mode(self, mode):
-        # assert type(mode) is IntType, "mode is not an integer: %r" % mode
-        self.mode = mode
-        if self.option == -1:
-            self.option = 0
-
-    def set_option(self, option):
-        # assert type(option) is IntType, "option is not an integer:
-        # %r" % option
-        self.option = option
-        if self.mode == -1:
-            self.option = 1
-
+    @property
     def mode(self):
         return self._mode
 
+    @mode.setter
+    def mode(self, value):
+        # auto/manual 0/1
+        self._mode = value
+        if self._mode is None:
+            self._mode = 0
+
+    @mode.deleter
+    def mode(self):
+        del self._mode
+
+    @property
     def option(self):
         return self._option
+
+    @option.setter
+    def option(self, value):
+        self._option = value
+        if self._option is None:
+            self._option = 1
+
+    @option.deleter
+    def option(self):
+        del self._option
 
     def data_print(self):
         print("Data: {}, {}").format(self.mode, self.option)
