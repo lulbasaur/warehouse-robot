@@ -4,8 +4,8 @@ import TCPData
 import sys
 import json
 import logging
+import pickle
 
-logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s',)
 
 
 class ThreadedServer(object):
