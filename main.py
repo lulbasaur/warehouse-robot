@@ -61,10 +61,12 @@ class ThreadedServer(object):
                 client.close()
                 return False
 
-    def processdata(self, data):
+    def process_data(self, data):
 
 
-        return data;
+        return data
+
+
 
 if __name__ == "__main__":
     while True:
