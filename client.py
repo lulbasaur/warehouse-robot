@@ -5,7 +5,6 @@ from __future__ import print_function
 import socket
 import pickle
 import sys
-import sys
 from TCPData import TCPData
 # Enable for clearing terminal purposes
 # import os
@@ -113,36 +112,44 @@ def test_send_msg_to_server(s_socket):
     print ("received data:", data.decode('utf-8'))
 
 
-def robot_menu():
+def automatic_mode(data):
+    print("Prioritize region 0-4 [Default 0] ")
+    prio = get_and_validate_int_input(0, 4, 0)
+    data.set_option(prio)
+    return data
+
+
+def manual_mode(data):
+    pass
+
+
+def robot_menu(data):
     print("1. Automatic")
     print("2. Manual")
     print("3. Quit")
-
     chosen_option = get_and_validate_int_input(1, 4, 4)
-    data = TCPData()
-
     if chosen_option == 1:
-        print("Prioritize region 0-4 [Default 0] ")
-        prio = get_and_validate_int_input(0, 4, 0)
-    # chosen_option = -1
-    # while(chosen_option > 0 and chosen_option <= 4):
-    chosen_option = get_and_validate_int_input(1, 4, 4)
-
-    data = TCPData()
-    if chosen_option == 1:
-        prio = int(input("Prioritize region 0-4: [Default 0]"))
         data.set_mode(0)
-        data.set_auto_prio(prio)
     elif chosen_option == 2:
         data.set_mode(1)
     else:
         sys.exit()
+    return data
 
 
 def main():
     # get_integer_input(0, 4, 2)
     s_socket = connection_menu()
-    robot_menu()
+    data = TCPData()
+    data = robot_menu(data)
+
+    if data.mode == 0:
+        print ("success")
+    elif data.mode == 1:
+        raise NotImplementedError
+    else:
+        raise NotImplementedError
+
     test_send_msg_to_server(s_socket)
     # robot_menu()
     # socket = connect_to_server(TCP_IP, TCP_PORT)
