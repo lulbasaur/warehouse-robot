@@ -1,23 +1,13 @@
 <html>
-
 <head>
-
 </head>
-
 <body>
-
     <canvas width="1000" height="700" id="canvas">
     </canvas>
-
-
-
     <script>
-
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
-
         const ws = new WebSocket("ws://localhost:8080");
-
         ws.onmessage = (mess) => {
             let img = new Image();
             img.src = URL.createObjectURL(mess.data);
@@ -27,5 +17,4 @@
         }
     </script>
 </body>
-
 </html>
