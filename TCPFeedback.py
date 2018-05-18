@@ -4,6 +4,8 @@ class TCPFeedback(object):
         self.last_action = None
         self.temperature = None
         self.mode = None
+
+        
     @property
     def last_action(self):
         return self._last_action
