@@ -6,13 +6,14 @@ import socket
 import pickle
 import sys
 from TCPData import TCPData
-
+from TCPFeedback import TCPFeedback
 # Enable for clearing terminal purposes
 # import os
 
 DEFAULT_IP = '127.0.0.1'
 DEFAULT_PORT = 5005
 BUFFER_SIZE = 4096
+
 
 def connect_to_server(server_ip, server_port):
     try:
@@ -78,6 +79,7 @@ def open_recent_server():
     f.close()
     return {'ip': server_ip, 'port': server_port}
 
+
 def connection_menu():
     print ("-----------------------------------")
     print ("1. Connect to server")
@@ -112,7 +114,7 @@ def connection_menu():
         print("Exiting...")
         sys.exit()
 
-    # Enable to clear terminal
+    # Enable this to clear the terminal after each menu action/robot input
     # os.system('cls' if os.name == 'nt' else 'clear')
     return s_socket
 
@@ -177,20 +179,21 @@ def receive_serialized_data(s_socket):
 def main():
     s_socket = connection_menu()
     data = TCPData()
+    feedback = TCPFeedback()
 
-    data = robot_menu(data)
+    while(1):
+        data = robot_menu(data)
+        if data.mode == 0:
+            data = automatic_mode(data)
+        elif data.mode == 1:
+            data = manual_mode(data)
+        else:
+            raise ValueError
 
-    if data.mode == 0:
-        data = automatic_mode(data)
-    elif data.mode == 1:
-        data = manual_mode(data)
-    else:
-        raise ValueError
-
-    send_serialized_data(s_socket, data)
-    data = receive_serialized_data(s_socket)
-    print("Option: ", data.option)
-    print("Mode: ", data.mode)
+        send_serialized_data(s_socket, data)
+        feedback = receive_serialized_data(s_socket)
+        print("Last action: ", feedback.option)
+        print("Temperature: ", feedback.mode)
 
     test_send_msg_to_server(s_socket)
     # robot_menu()
