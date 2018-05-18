@@ -20,18 +20,22 @@ class ClientThread(threading.Thread):
         threading.Thread.__init__(self, name=str(__name))
         self.client = __client
         self.address = __address
-
     def run(self):
+        '''
+        run thread
+        '''
         while True:
             try:
                 data_rx = self.client.recv(BUFFER_SIZE)
                 if data_rx:
                     logging.debug('Data recieved')
-                    #decode data - json probably
-                    response = data_rx.decode('utf-8')
-                    print(response)#debug, todo: remove
+                    #decode data - pickle data
+                    response_TCPData = pickle.loads(data_rx)
+                    #print(response)#debug, todo: remove
+                    print(response_TCPData.option)
+                    print(response_TCPData.mode)
                     #send echo
-                    self.client.sendall(response.encode('utf-8'))
+                    self.client.sendall(pickle.dumps(response_TCPData))
                 else:
                     raise ConnectionError('Client disconnected')
             except ConnectionError:
@@ -46,6 +50,7 @@ class ClientThread(threading.Thread):
 
 
 def listen_for_incoming_connections(sock):
+
     sock.listen(3)
     thread_id = 1
     thread_name_temp = 'thread_'
