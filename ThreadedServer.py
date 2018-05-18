@@ -1,12 +1,11 @@
-import TCPData
+import sys
 import socket
 import threading
-import sys
 import json
 import logging
 import pickle
-import TCPFeedback from TCPFeedback
-import TCPData from TCPData
+from TCPFeedback import TCPFeedback
+from TCPData import TCPData
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s',)
 DEFAULT_IP = '127.0.0.1'
