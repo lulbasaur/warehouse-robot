@@ -175,9 +175,6 @@ def receive_serialized_data(s_socket):
     deserialized_data = deserialize_data(serialized_data)
     return deserialized_data
 
-def print_feedback(feedback):
-    feedback.print_feedback()
-
 
 def main():
     s_socket = connection_menu()
@@ -197,9 +194,7 @@ def main():
         feedback = receive_serialized_data(s_socket)
 
         if isinstance(feedback.mode, int):
-            print("Last action: ", feedback.last_action)
-            print("Mode: ", feedback.mode)
-            print("Temperature: ", feedback.temperature)
+            feedback.print_feedback()
         else:
             print("Error")
     test_send_msg_to_server(s_socket)

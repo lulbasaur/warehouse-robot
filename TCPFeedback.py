@@ -93,11 +93,42 @@ class TCPFeedback(object):
     def mode(self):
         del self._mode
 
-    def mode_to_string(n):
-        if n is 0:
+    def mode_to_string(self):
+        if self._mode is 0:
             return "Automatic"
         else:
             return "Manual"
 
+    def action_to_string(self):
+        if self._mode is 1:
+            if self._last_action is 0:
+                return "LEFT"
+            elif self._last_action is 1:
+                return "FORWARD"
+            elif self._last_action is 2:
+                return "RIGHT"
+            elif self._last_action is 3:
+                return "BACKWARD"
+            else:
+                return "No move"
+        else:
+            if self._last_action is 0:
+                return "Prioritized region 0"
+            elif self._last_action is 1:
+                return "Prioritized region 1"
+            elif self._last_action is 2:
+                return "Prioritized region 2"
+            elif self._last_action is 3:
+                return "Prioritized region 3"
+            else:
+                return "No move"
+
     def print_feedback(self):
-        print("Mode: ", mode_to_string(_mode))
+        print("--------- Feedback ---------")
+        print("Mode: ", self.mode_to_string())
+        print("Action: ", self.action_to_string())
+        print("Temperature: ", self._temperature, "degrees")
+        print("Humidity: ", self._humidity, "%")
+        print("Gyroscope: ", self._gyro, "degrees")
+        print("Proximity: ", self._proximity, "cm")
+        print("----------------------------")
