@@ -10,6 +10,7 @@
   "author": "Casper Strömberg",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.16.3",
     "node": "^10.0.0",
     "opencv": "git+https://github.com/peterbraden/node-opencv.git",
     "ws": "^5.1.1"
