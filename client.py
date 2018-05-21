@@ -8,7 +8,7 @@ import sys
 from TCPData import TCPData
 from TCPFeedback import TCPFeedback
 # Enable for clearing terminal purposes
-# import os
+import os
 
 DEFAULT_IP = '127.0.0.1'
 DEFAULT_PORT = 5005
@@ -81,13 +81,14 @@ def open_recent_server():
 
 
 def connection_menu():
-    print ("-----------------------------------")
+    # os.system('cls' if os.name == 'nt' else 'clear')
+    print ("----------------------------")
     print ("1. Connect to server")
     print ("2. Connect to most recently used server")
     print ("3. List available servers")
     print ("4. Start videofeed here perhaps?")
     print ("5. Quit")
-    print ("-----------------------------------")
+    print ("----------------------------")
     chosen_option = get_and_validate_int_input(1, 4, 1)
 
     if chosen_option == 1:
@@ -119,11 +120,13 @@ def connection_menu():
     return s_socket
 
 
+'''
 def test_send_msg_to_server(s_socket):
     xxx = input("Msg: ")
     send_msg_to_server(s_socket, xxx)
     data = recv_data_from_server(s_socket, 1024)
     print ("received data:", data.decode('utf-8'))
+'''
 
 
 def automatic_mode(data):
@@ -134,7 +137,7 @@ def automatic_mode(data):
 
 
 def manual_mode(data):
-    print("Move the robot [Default FORWARD]")
+    print("Manual move [Default FORWARD]: ")
     print("0: LEFT, 1: FORWARD, 2: RIGHT, 3: BACKWARD")
     move = get_and_validate_int_input(0, 3, 1)
     data.option = move
@@ -142,9 +145,11 @@ def manual_mode(data):
 
 
 def robot_menu(data):
+    print("----------------------------")
     print("1. Automatic")
     print("2. Manual")
     print("3. Quit")
+    print("----------------------------")
     chosen_option = get_and_validate_int_input(1, 3, 1)
     if chosen_option == 1:
         data.mode = 0
@@ -194,15 +199,12 @@ def main():
         feedback = receive_serialized_data(s_socket)
 
         if isinstance(feedback.mode, int):
+            os.system('cls' if os.name == 'nt' else 'clear')
             feedback.print_feedback()
         else:
             print("Error")
-    test_send_msg_to_server(s_socket)
-    # robot_menu()
-    # socket = connect_to_server(TCP_IP, TCP_PORT)
-    # data = recv_data_from_server(new_socket, BUFFER_SIZE)
+
     close_connection_to_server(s_socket)
-    # print "received data:", data
 
 
 if __name__ == "__main__":

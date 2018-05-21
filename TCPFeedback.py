@@ -124,6 +124,7 @@ class TCPFeedback(object):
                 return "No move"
 
     def print_feedback(self):
+        print("")
         print("--------- Feedback ---------")
         print("Mode: ", self.mode_to_string())
         print("Action: ", self.action_to_string())
@@ -132,3 +133,4 @@ class TCPFeedback(object):
         print("Gyroscope: ", self._gyro, "degrees")
         print("Proximity: ", self._proximity, "cm")
         print("----------------------------")
+        print("")
