@@ -100,28 +100,30 @@ class TCPFeedback(object):
             return "Manual"
 
     def action_to_string(self):
+        move_string = ""
         if self._mode is 1:
             if self._last_action is 0:
-                return "LEFT"
+                move_string = "LEFT"
             elif self._last_action is 1:
-                return "FORWARD"
+                move_string = "FORWARD"
             elif self._last_action is 2:
-                return "RIGHT"
+                move_string = "RIGHT"
             elif self._last_action is 3:
-                return "BACKWARD"
+                move_string = "BACKWARD"
             else:
-                return "No move"
+                move_string = "No move"
         else:
             if self._last_action is 0:
-                return "Prioritized region 0"
+                move_string = "Prioritized region 0"
             elif self._last_action is 1:
-                return "Prioritized region 1"
+                move_string = "Prioritized region 1"
             elif self._last_action is 2:
-                return "Prioritized region 2"
+                move_string = "Prioritized region 2"
             elif self._last_action is 3:
-                return "Prioritized region 3"
+                move_string = "Prioritized region 3"
             else:
-                return "No move"
+                move_string = "No move"
+        return move_string
 
     def print_feedback(self):
         print("")

@@ -81,11 +81,10 @@ def open_recent_server():
 
 
 def connection_menu():
-    # os.system('cls' if os.name == 'nt' else 'clear')
     print ("----------------------------")
     print ("1. Connect to server")
     print ("2. Connect to most recently used server")
-    print ("3. List available servers")
+    print ("3. List available servers [NOT IMPLEMENTED]")
     print ("4. Start videofeed here perhaps?")
     print ("5. Quit")
     print ("----------------------------")
@@ -182,6 +181,7 @@ def receive_serialized_data(s_socket):
 
 
 def main():
+    os.system('cls' if os.name == 'nt' else 'clear')
     s_socket = connection_menu()
     data = TCPData()
     feedback = TCPFeedback()
