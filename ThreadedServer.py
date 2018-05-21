@@ -36,11 +36,15 @@ class ClientThread(threading.Thread):
                     print(response_TCPData.option)
                     print(response_TCPData.mode)
                     #send to robot here - need to specify which robot
+                    ## insert robot polling function
                     #get feedback
                     response_TCP_FB = TCPFeedback() #to remove
                     response_TCP_FB.last_action = response_TCPData.option #to remove
                     response_TCP_FB.mode = response_TCPData.mode #to be removed
                     response_TCP_FB.temperature = 30 #to be removed
+                    response_TCP_FB.humidity = 30 #to be removed
+                    response_TCP_FB.gyro = 123 #to be removed
+                    response_TCP_FB.proximity = 1234 #to be removed
                     self.client.sendall(pickle.dumps(response_TCP_FB))
                 else:
                     raise ConnectionError('Client disconnected')
