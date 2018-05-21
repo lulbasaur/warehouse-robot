@@ -175,13 +175,16 @@ def receive_serialized_data(s_socket):
     deserialized_data = deserialize_data(serialized_data)
     return deserialized_data
 
+def print_feedback(feedback):
+    feedback.print_feedback()
+
 
 def main():
     s_socket = connection_menu()
     data = TCPData()
     feedback = TCPFeedback()
 
-    while(1):
+    while 1:
         data = robot_menu(data)
         if data.mode == 0:
             data = automatic_mode(data)
@@ -192,9 +195,13 @@ def main():
 
         send_serialized_data(s_socket, data)
         feedback = receive_serialized_data(s_socket)
-        print("Last action: ", feedback.option)
-        print("Temperature: ", feedback.mode)
 
+        if isinstance(feedback.mode, int):
+            print("Last action: ", feedback.last_action)
+            print("Mode: ", feedback.mode)
+            print("Temperature: ", feedback.temperature)
+        else:
+            print("Error")
     test_send_msg_to_server(s_socket)
     # robot_menu()
     # socket = connect_to_server(TCP_IP, TCP_PORT)
