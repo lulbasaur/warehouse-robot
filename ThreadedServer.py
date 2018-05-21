@@ -35,11 +35,13 @@ class ClientThread(threading.Thread):
                     #print(response)#debug, todo: remove
                     print(response_TCPData.option)
                     print(response_TCPData.mode)
-                    #send echo
-                    response_TCP_FB = TCPFeedback()
-                    response_TCP_FB.last_action = response_TCPData.mode
-                    response_TCP_FB.temperature = 30
-                    self.client.sendall(pickle.dumps(response_TCPData))
+                    #send to robot here - need to specify which robot
+                    #get feedback
+                    response_TCP_FB = TCPFeedback() #to remove
+                    response_TCP_FB.last_action = response_TCPData.option #to remove
+                    response_TCP_FB.mode = response_TCPData.mode #to be removed
+                    response_TCP_FB.temperature = 30 #to be removed
+                    self.client.sendall(pickle.dumps(response_TCP_FB))
                 else:
                     raise ConnectionError('Client disconnected')
             except ConnectionError:
