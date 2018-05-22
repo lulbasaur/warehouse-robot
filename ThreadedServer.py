@@ -94,6 +94,7 @@ def listen_for_incoming_connections(sock, robots):
         t = ClientThread(t_name, client, address, robots)
         threads.append(t)
         thread_id = thread_id+1
+        t.daemon = True
         t.start()
 
 def main():
