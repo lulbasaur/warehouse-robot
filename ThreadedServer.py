@@ -62,6 +62,9 @@ class ClientThread(threading.Thread):
                 logging.debug('Socket timeout with client: %s', self.client)
                 self.client.close()
                 break
+            except(KeyboardInterrupt, SystemExit):
+                self.client.close()
+                break
             except:
                 logging.debug('Unknown error with client: %s', self.client)
                 self.client.close()
@@ -79,23 +82,26 @@ class ClientThread(threading.Thread):
 
 
 def listen_for_incoming_connections(sock, robots):
-
     sock.listen(3)
     thread_id = 1
     thread_name_temp = 'thread_'
     while True:
-        print("socket is listening...")
-        client, address = sock.accept()
-        print('Connected to :', address[0], ':', address[1])
-        #time out if client is inactive
-        client.settimeout(30)
-        #spawn thread for each client
-        t_name = thread_name_temp+str(thread_id)
-        t = ClientThread(t_name, client, address, robots)
-        threads.append(t)
-        thread_id = thread_id+1
-        t.setDaemon(True)
-        t.start()
+        try:
+            print("socket is listening...")
+            client, address = sock.accept()
+            print('Connected to :', address[0], ':', address[1])
+            #time out if client is inactive
+            client.settimeout(30)
+            #spawn thread for each client
+            t_name = thread_name_temp+str(thread_id)
+            t = ClientThread(t_name, client, address, robots)
+            threads.append(t)
+            thread_id = thread_id+1
+            t.setDaemon(True)
+            t.start()
+        except(KeyboardInterrupt, SystemExit):
+            sock.close()
+            break
 
 def main():
     '''
