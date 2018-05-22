@@ -141,12 +141,12 @@ def manual_mode(data):
     data.option = move
     return data
 
-
+'''
 def stop_mode(data):
     print("Stopping robot...")
     data.option = 5
     return data
-
+'''
 
 def robot_menu(data):
     print("----------------------------")
@@ -210,7 +210,8 @@ def main():
         elif data.mode == 1:
             data = manual_mode(data)
         elif data.mode == 2:
-            data = stop_mode(data)
+            # data = stop_mode(data)
+            print("Stopping robot...")
         else:
             raise ValueError
 
