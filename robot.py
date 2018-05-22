@@ -3,14 +3,15 @@ import socket
 class bluetooth_connection(object):
     def __init__(self, address, port):
         self.address = address
-        self.port = port
+        self.port = 6
         self.backlog = 1
         self.packet_size = 1024
-
+        self.incomming_connection = False
 
     #Connect to a bluetooth server. For us this is the robot.
     def connect(self):
         self.connection = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+#        print "address: " + self.address + " port: " + str(self.port)
         self.connection.connect((self.address, self.port))
         print("Connected to robot!")
 
@@ -27,12 +28,14 @@ class bluetooth_connection(object):
         self.connection.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.connection.bind((self.address, self.port))
         self.connection.listen(self.backlog)
-        self.incomming_connection, self.incomming_address = self.connection.accept()
+#        self.incomming_connection, self.incomming_address = self.connection.accept()
         print("Client accepted")
 
 
     #Get data from robot
     def receive(self):
+        if not self.incomming_connection:
+            self.incomming_connection, self.incomming_address = self.connection.accept()
         data = self.incomming_connection.recv(self.packet_size)
         print("Data received")
         return data

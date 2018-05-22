@@ -41,9 +41,9 @@ class ClientThread(threading.Thread):
                     #Forward data to robot. TODO need to specify which robot
                     self.robots[0].send(data_rx)
                     #Receive data from robot and forward it to the client
-                    self.poll_and_forward()
+                    #self.poll_and_forward()
                     #get feedback
-                    '''response_TCP_FB = TCPFeedback() #to remove
+                    response_TCP_FB = TCPFeedback() #to remove
                     response_TCP_FB.last_action = response_TCPData.option #to remove
                     response_TCP_FB.mode = response_TCPData.mode #to be removed
                     response_TCP_FB.temperature = 30 #to be removed
@@ -51,7 +51,7 @@ class ClientThread(threading.Thread):
                     response_TCP_FB.gyro = 123 #to be removed
                     response_TCP_FB.proximity = 1234 #to be removed
                     self.client.sendall(pickle.dumps(response_TCP_FB))
-                    '''
+                    
                 else:
                     raise ConnectionError('Client disconnected')
             except ConnectionError:
@@ -75,6 +75,7 @@ class ClientThread(threading.Thread):
     def poll_and_forward(self):
         while True:
             response = self.robot[0].receive()
+            response = pickle.loads(TCPFeedback)
             if not response:
                 break
             self.client.sendall(response)
@@ -133,14 +134,14 @@ def main():
     with open("robot.conf") as file:
         for line in file:
             robot_adr, robot_port, server_adr, server_port = line.split(",")
-            try:
-                robots.append(robot.robot(robot_adr, robot_port, server_adr, server_port))
-            except:
-                print("Could not find robot on address/port " + robot_adr + "/" + robot_port + ".")
+            #try:
+            robots.append(robot.robot(robot_adr, robot_port, server_adr, server_port))
+            print("OK???")
+            #except:
+            #    print "Could not find robot on address/port " + robot_adr + "/" + robot_port + "."
 
+    print("hit?")
     listen_for_incoming_connections(sock, robots)
-
-
 
 if __name__ == "__main__":
     main()
