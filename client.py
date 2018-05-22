@@ -5,10 +5,9 @@ from __future__ import print_function
 import socket
 import pickle
 import sys
+import os
 from TCPData import TCPData
 from TCPFeedback import TCPFeedback
-# Enable for clearing terminal purposes
-import os
 
 DEFAULT_IP = '127.0.0.1'
 DEFAULT_PORT = 5005
