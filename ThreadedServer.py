@@ -39,9 +39,9 @@ class ClientThread(threading.Thread):
                     print(response_TCPData.option)
                     print(response_TCPData.mode)
                     #Forward data to robot. TODO need to specify which robot
-                    robots[0].send(data_rx)
+                    self.robots[0].send(data_rx)
                     #Receive data from robot and forward it to the client
-                    poll_and_forward() 
+                    self.poll_and_forward()
                     #get feedback
                     '''response_TCP_FB = TCPFeedback() #to remove
                     response_TCP_FB.last_action = response_TCPData.option #to remove
@@ -62,12 +62,16 @@ class ClientThread(threading.Thread):
                 logging.debug('Socket timeout with client: %s', self.client)
                 self.client.close()
                 break
+            except:
+                logging.debug('Unknown error with client: %s', self.client)
+                self.client.close()
+                break
         return False
- 
+
 
     def poll_and_forward(self):
         while True:
-            response = robot[0].receive()
+            response = self.robot[0].receive()
             if not response:
                 break
             self.client.sendall(response)
@@ -125,8 +129,8 @@ def main():
             try:
                 robots.append(robot.robot(robot_adr, robot_port, server_adr, server_port))
             except:
-                print "Could not find robot on address/port " + robot_adr + "/" + robot_port + "."
- 
+                print("Could not find robot on address/port " + robot_adr + "/" + robot_port + ".")
+
     listen_for_incoming_connections(sock, robots)
 
 
