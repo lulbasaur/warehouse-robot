@@ -3,15 +3,15 @@ import socket
 class bluetooth_connection(object):
     def __init__(self, address, port):
         self.address = address
-        self.port = 5
+        self.port = 6
         self.backlog = 1
         self.packet_size = 1024
-
+        self.incomming_connection = False
 
     #Connect to a bluetooth server. For us this is the robot.
     def connect(self):
         self.connection = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-        print "address: " + self.address + " port: " + str(self.port)
+#        print "address: " + self.address + " port: " + str(self.port)
         self.connection.connect((self.address, self.port))
         print("Connected to robot!")
 
