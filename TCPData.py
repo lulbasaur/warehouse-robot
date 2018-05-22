@@ -28,14 +28,14 @@ class TCPData(object):
     @option.setter
     def option(self, value):
         self._option = value
+        # converting Swedish inputs to Finnish inputs
         if self._option is 0:
             self._option = 4
-        if self._option is 2:
+        elif self._option is 2:
             self._option = 3
-        if self._option is 3:
+        elif self._option is 3:
             self._option = 2
-
-        if self._option is None:
+        elif self._option is None:
             self._option = 1
 
     @option.deleter
