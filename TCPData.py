@@ -12,7 +12,7 @@ class TCPData(object):
 
     @mode.setter
     def mode(self, value):
-        # auto/manual 0/1
+        # auto/manual/stop 0/1/2
         self._mode = value
         if self._mode is None:
             self._mode = 0
@@ -28,7 +28,14 @@ class TCPData(object):
     @option.setter
     def option(self, value):
         self._option = value
-        if self._option is None:
+        # converting Swedish inputs to Finnish inputs
+        if self._option is 0:
+            self._option = 4
+        elif self._option is 2:
+            self._option = 3
+        elif self._option is 3:
+            self._option = 2
+        elif self._option is None:
             self._option = 1
 
     @option.deleter
