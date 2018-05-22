@@ -142,16 +142,27 @@ def manual_mode(data):
     return data
 
 
+def stop_mode(data):
+    print("Stopping robot...")
+    data.option = 5
+    return data
+
+
 def robot_menu(data):
     print("----------------------------")
     print("1. Automatic")
     print("2. Manual")
-    print("3. Quit")
+    print("3. Stop")
+    print("4. Quit")
     print("----------------------------")
     chosen_option = get_and_validate_int_input(1, 3, 1)
     if chosen_option == 1:
         data.mode = 0
     elif chosen_option == 2:
+        data.mode = 1
+    elif chosen_option == 3:
+        data.mode = 2
+    elif isinstance(chosen_option, None):
         data.mode = 1
     else:
         sys.exit()
@@ -169,13 +180,20 @@ def send_serialized_data(s_socket, data):
 
 
 def deserialize_data(data):
-    deserialized_data = pickle.loads(data)
-    return deserialized_data
+    try:
+        deserialized_data = pickle.loads(data)
+        return deserialized_data
+    except:
+        print("Did not receive feedback data from server.")
+    # return deserialized_data
 
 
 def receive_serialized_data(s_socket):
     serialized_data = s_socket.recv(BUFFER_SIZE)
-    deserialized_data = deserialize_data(serialized_data)
+    if isinstance(serialized_data, bytes):
+        deserialized_data = deserialize_data(serialized_data)
+    else:
+        deserialized_data = TCPFeedback()
     return deserialized_data
 
 
@@ -191,17 +209,19 @@ def main():
             data = automatic_mode(data)
         elif data.mode == 1:
             data = manual_mode(data)
+        elif data.mode == 2:
+            data = stop_mode(data)
         else:
             raise ValueError
 
         send_serialized_data(s_socket, data)
         feedback = receive_serialized_data(s_socket)
 
-        if isinstance(feedback.mode, int):
+        if isinstance(feedback, TCPFeedback):
             os.system('cls' if os.name == 'nt' else 'clear')
             feedback.print_feedback()
         else:
-            print("Error")
+            print("Feedback is not an instance of TCPFeedback")
 
     close_connection_to_server(s_socket)
 
