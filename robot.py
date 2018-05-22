@@ -12,11 +12,13 @@ class bluetooth_connection(object):
     def connect(self):
         self.connection = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
         self.connection.connect((self.address, self.port))
+        print "Connected to robot!"
 
     
     #Send message. Assumes byte stream i provided
     def send(self, message):
         self.connection.sendall(message)
+        print "Message sent"
 
 
     #Sets up listening interface. 
@@ -26,11 +28,13 @@ class bluetooth_connection(object):
         self.connection.bind((self.address, self.port))
         self.connection.listen(self.backlog)
         self.incomming_connection, self.incomming_address = self.connection.accept()
+        print "Client accepted"
 
 
     #Get data from robot
     def receive(self):
         data = self.incomming_connection.recv(self.packet_size)
+        print "Data received"
         return data
 
 
@@ -38,7 +42,7 @@ class bluetooth_connection(object):
         try:
             self.connection.close()
         except:
-            print "Server connection didn̈́t want to close"
+            print "Server connection did not want to close"
 
         try:
             self.incomming_connection.close()

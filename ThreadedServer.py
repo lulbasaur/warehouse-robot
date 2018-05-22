@@ -74,7 +74,7 @@ class ClientThread(threading.Thread):
 
 
 
-def listen_for_incoming_connections(sock robots):
+def listen_for_incoming_connections(sock, robots):
 
     sock.listen(3)
     thread_id = 1
@@ -120,12 +120,12 @@ def main():
     print('Connecting to robots')
     robots = []
     with open("robot.conf") as file:
-    for line in file:
-        robot_adr, robot_port, server_adr, server_port = line.split(",")
-        try:
-            robots.append(robot.robot(robot_adr, robot_port, server_adr, server_port))
-        except:
-            print "Could not find robot on address/port " + robot_adr + "/" + robot_port + "."
+        for line in file:
+            robot_adr, robot_port, server_adr, server_port = line.split(",")
+            try:
+                robots.append(robot.robot(robot_adr, robot_port, server_adr, server_port))
+            except:
+                print "Could not find robot on address/port " + robot_adr + "/" + robot_port + "."
  
     listen_for_incoming_connections(sock, robots)
 
