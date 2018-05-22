@@ -39,7 +39,7 @@ class ClientThread(threading.Thread):
                     print(response_TCPData.option)
                     print(response_TCPData.mode)
                     #Forward data to robot. TODO need to specify which robot
-                    robots[0].send(data_rx)
+                    self.robots[0].send(data_rx)
                     #Receive data from robot and forward it to the client
                     poll_and_forward() 
                     #get feedback
@@ -75,7 +75,7 @@ class ClientThread(threading.Thread):
 
 
 def listen_for_incoming_connections(sock, robots):
-
+    print("listening function TOP")
     sock.listen(3)
     thread_id = 1
     thread_name_temp = 'thread_'
@@ -122,11 +122,13 @@ def main():
     with open("robot.conf") as file:
         for line in file:
             robot_adr, robot_port, server_adr, server_port = line.split(",")
-            try:
-                robots.append(robot.robot(robot_adr, robot_port, server_adr, server_port))
-            except:
-                print "Could not find robot on address/port " + robot_adr + "/" + robot_port + "."
- 
+            #try:
+            robots.append(robot.robot(robot_adr, robot_port, server_adr, server_port))
+            print("OK???")
+            #except:
+            #    print "Could not find robot on address/port " + robot_adr + "/" + robot_port + "."
+
+    print("hit?")
     listen_for_incoming_connections(sock, robots)
 
 
