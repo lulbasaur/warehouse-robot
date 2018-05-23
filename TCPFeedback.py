@@ -76,7 +76,7 @@ class TCPFeedback(object):
             self._proximity = 1
 
     @proximity.deleter
-    def proximity(self):
+    def proximity(self):op
         del self._proximity
 
     @property
@@ -97,6 +97,8 @@ class TCPFeedback(object):
     def mode_to_string(self):
         if self._mode is 0:
             return "Automatic"
+        elif self._mode is 2:
+            return "Stopped"
         else:
             return "Manual"
 
@@ -111,6 +113,8 @@ class TCPFeedback(object):
                 move_string = "RIGHT"
             elif self._last_action is 3:
                 move_string = "BACKWARD"
+            elif self._last_action is 4:
+                move_string = "LIFTING"
             else:
                 move_string = "No move"
         else:
