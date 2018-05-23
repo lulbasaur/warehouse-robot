@@ -6,17 +6,18 @@
 <body>
     <canvas width="1000" height="700" id="canvas">
     </canvas>
-    <input id="url" type="text" placeholder="url" value="localhost" />
+    <input id="url" type="text" placeholder="ip"  />
     <button id="connect">Connect</button>
     <script>
         const url = document.getElementById("url");
         document.getElementById("connect").onclick = () => {
             connect(url.value);
+	console.log(url.value);
         }
         const connect = url => {
             const canvas = document.getElementById("canvas");
             const ctx = canvas.getContext("2d");
-            const ws = new WebSocket("ws://localhost:8080");
+            const ws = new WebSocket("ws://" + url + ":8080");
             ws.onmessage = (mess) => {
                 let img = new Image();
                 img.src = URL.createObjectURL(mess.data);

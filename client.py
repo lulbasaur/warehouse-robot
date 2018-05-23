@@ -7,6 +7,8 @@ import socket
 import pickle
 import sys
 import os
+import webbrowser
+import subprocess
 from TCPData import TCPData
 from TCPFeedback import TCPFeedback
 
@@ -85,7 +87,7 @@ def connection_menu():
     print ("1. Connect to server")
     print ("2. Connect to most recently used server")
     print ("3. List available servers [NOT IMPLEMENTED]")
-    print ("4. Start videofeed here perhaps?")
+    print ("4. Start videofeed")
     print ("5. Quit")
     print ("----------------------------")
     chosen_option = get_and_validate_int_input(1, 4, 1)
@@ -109,7 +111,20 @@ def connection_menu():
     elif chosen_option == 3:
         raise NotImplementedError
     elif chosen_option == 4:
-        pass
+        print("Camera server IP: ")
+        camera_ip = input("> ")
+        if camera_ip == "":
+            camera_ip = "127.0.0.1"
+        print("Camera server port: ")
+        camera_port = input("> ")
+        if camera_port == "":
+            camera_port = 5005
+        url = "http://" + camera_ip + ":" + camera_port
+        if sys.platform == 'darwin':    # in case of OS X
+            subprocess.Popen(['open', url])
+        else:
+            webbrowser.open_new_tab(url)
+        os.execl(sys.executable, sys.executable, *sys.argv)
     else:
         print("Exiting...")
         sys.exit()
