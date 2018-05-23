@@ -149,10 +149,11 @@ def automatic_mode(data):
 
 def manual_mode(data):
     print("Manual move [Default FORWARD]: ")
-    print("0: LEFT, 1: FORWARD, 2: RIGHT, 3: BACKWARD")
-    move = get_and_validate_int_input(0, 3, 1)
+    print("0: LEFT, 1: FORWARD, 2: RIGHT, 3: BACKWARD, 4: LIFT")
+    move = get_and_validate_int_input(0, 4, 1)
     data.option = move
     return data
+
 
 '''
 def stop_mode(data):

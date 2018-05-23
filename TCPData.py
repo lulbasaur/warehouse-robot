@@ -36,6 +36,8 @@ class TCPData(object):
             self._option = 3
         elif self._option is 3:
             self._option = 2
+        elif self._option is 4:
+            self._option = 5
         elif self._option is None:
             self._option = 1
 
