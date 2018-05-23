@@ -133,14 +133,12 @@ def main():
     robots = []
     with open("robot.conf") as file:
         for line in file:
-            robot_adr, robot_port, server_adr, server_port = line.split(",")
+            robot_adr, server_adr, bluetooth_port = line.split(",")
             #try:
-            robots.append(robot.robot(robot_adr, robot_port, server_adr, server_port))
-            print("OK???")
+            robots.append(robot.robot(robot_adr, int(bluetooth_port), server_adr, int(bluetooth_port)))
             #except:
             #    print "Could not find robot on address/port " + robot_adr + "/" + robot_port + "."
 
-    print("hit?")
     listen_for_incoming_connections(sock, robots)
 
 if __name__ == "__main__":
