@@ -1,3 +1,4 @@
+
 # Python client
 # !/usr/bin/python
 from __future__ import print_function
@@ -5,10 +6,9 @@ from __future__ import print_function
 import socket
 import pickle
 import sys
+import os
 from TCPData import TCPData
 from TCPFeedback import TCPFeedback
-# Enable for clearing terminal purposes
-# import os
 
 DEFAULT_IP = '127.0.0.1'
 DEFAULT_PORT = 5005
@@ -81,13 +81,13 @@ def open_recent_server():
 
 
 def connection_menu():
-    print ("-----------------------------------")
+    print ("----------------------------")
     print ("1. Connect to server")
     print ("2. Connect to most recently used server")
-    print ("3. List available servers")
+    print ("3. List available servers [NOT IMPLEMENTED]")
     print ("4. Start videofeed here perhaps?")
     print ("5. Quit")
-    print ("-----------------------------------")
+    print ("----------------------------")
     chosen_option = get_and_validate_int_input(1, 4, 1)
 
     if chosen_option == 1:
@@ -119,11 +119,13 @@ def connection_menu():
     return s_socket
 
 
+'''
 def test_send_msg_to_server(s_socket):
     xxx = input("Msg: ")
     send_msg_to_server(s_socket, xxx)
     data = recv_data_from_server(s_socket, 1024)
     print ("received data:", data.decode('utf-8'))
+'''
 
 
 def automatic_mode(data):
@@ -134,21 +136,34 @@ def automatic_mode(data):
 
 
 def manual_mode(data):
-    print("Move the robot [Default FORWARD]")
+    print("Manual move [Default FORWARD]: ")
     print("0: LEFT, 1: FORWARD, 2: RIGHT, 3: BACKWARD")
     move = get_and_validate_int_input(0, 3, 1)
     data.option = move
     return data
 
+'''
+def stop_mode(data):
+    print("Stopping robot...")
+    data.option = 5
+    return data
+'''
 
 def robot_menu(data):
+    print("----------------------------")
     print("1. Automatic")
     print("2. Manual")
-    print("3. Quit")
+    print("3. Stop")
+    print("4. Quit")
+    print("----------------------------")
     chosen_option = get_and_validate_int_input(1, 3, 1)
     if chosen_option == 1:
         data.mode = 0
     elif chosen_option == 2:
+        data.mode = 1
+    elif chosen_option == 3:
+        data.mode = 2
+    elif isinstance(chosen_option, None):
         data.mode = 1
     else:
         sys.exit()
@@ -166,20 +181,25 @@ def send_serialized_data(s_socket, data):
 
 
 def deserialize_data(data):
-    deserialized_data = pickle.loads(data)
-    return deserialized_data
+    try:
+        deserialized_data = pickle.loads(data)
+        return deserialized_data
+    except:
+        print("Did not receive feedback data from server.")
+    # return deserialized_data
 
 
 def receive_serialized_data(s_socket):
     serialized_data = s_socket.recv(BUFFER_SIZE)
-    deserialized_data = deserialize_data(serialized_data)
+    if isinstance(serialized_data, bytes):
+        deserialized_data = deserialize_data(serialized_data)
+    else:
+        deserialized_data = TCPFeedback()
     return deserialized_data
-
-def print_feedback(feedback):
-    feedback.print_feedback()
 
 
 def main():
+    os.system('cls' if os.name == 'nt' else 'clear')
     s_socket = connection_menu()
     data = TCPData()
     feedback = TCPFeedback()
@@ -190,24 +210,22 @@ def main():
             data = automatic_mode(data)
         elif data.mode == 1:
             data = manual_mode(data)
+        elif data.mode == 2:
+            # data = stop_mode(data)
+            print("Stopping robot...")
         else:
             raise ValueError
 
         send_serialized_data(s_socket, data)
         feedback = receive_serialized_data(s_socket)
 
-        if isinstance(feedback.mode, int):
-            print("Last action: ", feedback.last_action)
-            print("Mode: ", feedback.mode)
-            print("Temperature: ", feedback.temperature)
+        if isinstance(feedback, TCPFeedback):
+            os.system('cls' if os.name == 'nt' else 'clear')
+            feedback.print_feedback()
         else:
-            print("Error")
-    test_send_msg_to_server(s_socket)
-    # robot_menu()
-    # socket = connect_to_server(TCP_IP, TCP_PORT)
-    # data = recv_data_from_server(new_socket, BUFFER_SIZE)
+            print("Feedback is not an instance of TCPFeedback")
+
     close_connection_to_server(s_socket)
-    # print "received data:", data
 
 
 if __name__ == "__main__":
