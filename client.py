@@ -86,9 +86,8 @@ def connection_menu():
     print ("----------------------------")
     print ("1. Connect to server")
     print ("2. Connect to most recently used server")
-    print ("3. List available servers [NOT IMPLEMENTED]")
-    print ("4. Start videofeed")
-    print ("5. Quit")
+    print ("3. Connect to video feed")
+    print ("4. Quit")
     print ("----------------------------")
     chosen_option = get_and_validate_int_input(1, 4, 1)
 
@@ -109,8 +108,6 @@ def connection_menu():
         print ("Connecting to " + server['ip'] + ", on port " + server['port'])
         s_socket = connect_to_server(server['ip'], int(server['port']))
     elif chosen_option == 3:
-        raise NotImplementedError
-    elif chosen_option == 4:
         print("Camera server IP: ")
         camera_ip = input("> ")
         if camera_ip == "":
@@ -120,7 +117,7 @@ def connection_menu():
         if camera_port == "":
             camera_port = 5005
         url = "http://" + camera_ip + ":" + camera_port
-        if sys.platform == 'darwin':    # in case of OS X
+        if sys.platform == 'darwin':    # in case of OSX
             subprocess.Popen(['open', url])
         else:
             webbrowser.open_new_tab(url)
@@ -164,6 +161,7 @@ def stop_mode(data):
     return data
 '''
 
+
 def robot_menu(data):
     print("----------------------------")
     print("1. Automatic")
@@ -171,7 +169,7 @@ def robot_menu(data):
     print("3. Stop")
     print("4. Quit")
     print("----------------------------")
-    chosen_option = get_and_validate_int_input(1, 3, 1)
+    chosen_option = get_and_validate_int_input(1, 4, 1)
     if chosen_option == 1:
         data.mode = 0
     elif chosen_option == 2:
