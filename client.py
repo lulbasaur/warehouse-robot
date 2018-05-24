@@ -149,8 +149,8 @@ def automatic_mode(data):
 
 def manual_mode(data):
     print("Manual move [Default FORWARD]: ")
-    print("0: LEFT, 1: FORWARD, 2: RIGHT, 3: BACKWARD, 4: LIFT")
-    move = get_and_validate_int_input(0, 4, 1)
+    print("0: LEFT, 1: FORWARD, 2: RIGHT, 3: BACKWARD, 4: LIFT CRANE, 5: LOWER CRANE")
+    move = get_and_validate_int_input(0, 6, 1)
     data.option = move
     return data
 

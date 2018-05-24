@@ -76,7 +76,7 @@ class TCPFeedback(object):
             self._proximity = 1
 
     @proximity.deleter
-    def proximity(self):op
+    def proximity(self):
         del self._proximity
 
     @property
@@ -115,6 +115,8 @@ class TCPFeedback(object):
                 move_string = "BACKWARD"
             elif self._last_action is 4:
                 move_string = "LIFTING"
+            elif self._last_action is 5:
+                move_string = "LOWERING"
             else:
                 move_string = "No move"
         else:
