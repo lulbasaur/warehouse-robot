@@ -49,9 +49,11 @@ def go_robot_m(command):
             print(gs.value())
             pass
     elif command == "5":
-        mm.run_forever(speed_sp = RSPEED)
-        time.sleep(1)
         mm.run_forever(speed_sp = -(RSPEED))
+        time.sleep(0.7)
+        mm.stop(stop_action = ev3.Motor.STOP_ACTION_HOLD)
+    elif command == "6":
+        mm.run_forever(speed_sp = RSPEED)
         time.sleep(1)
         mm.stop(stop_action = ev3.Motor.STOP_ACTION_HOLD)
 
