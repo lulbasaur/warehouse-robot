@@ -5,6 +5,8 @@ class arduino(object):
     def __init__(self, arduino_address, ardiuno_port):
         self.arduino = bluetooth_connection.bluetooth_connection(robot_address, robot_port)
         self.arduino.listen()
+        self.MAC = 11:11:11:11:11
+        self.port = 5
 
 
     def __del__(self):
@@ -17,3 +19,5 @@ class arduino(object):
 
     def receive(self):
         return self.arduino.receive()
+
+

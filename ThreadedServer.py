@@ -134,10 +134,7 @@ def main():
     with open("robot.conf") as file:
         for line in file:
             robot_adr, server_adr, bluetooth_port = line.split(",")
-            #try:
             robots.append(robot.robot(robot_adr, int(bluetooth_port), server_adr, int(bluetooth_port)))
-            #except:
-            #    print "Could not find robot on address/port " + robot_adr + "/" + robot_port + "."
 
     listen_for_incoming_connections(sock, robots)
 
